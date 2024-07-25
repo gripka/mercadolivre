@@ -31,9 +31,9 @@ class ProductAdapter(private var products: MutableList<Product>) : RecyclerView.
 
     @SuppressLint("NotifyDataSetChanged")
     fun updateProducts(newProducts: List<Product>) {
-        products.clear()
+        val startPosition = products.size
         products.addAll(newProducts)
-        notifyDataSetChanged()
+        notifyItemRangeInserted(startPosition, newProducts.size)
     }
 
     inner class ProductViewHolder(private val binding: ItemProductBinding) : RecyclerView.ViewHolder(binding.root) {
