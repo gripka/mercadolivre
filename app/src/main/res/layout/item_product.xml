@@ -9,6 +9,7 @@
         android:id="@+id/productImage"
         android:layout_width="80dp"
         android:layout_height="80dp"
+        android:contentDescription="@string/todos"
         android:scaleType="centerCrop"
         android:layout_marginEnd="8dp" />
 
@@ -30,4 +31,5 @@
             android:layout_height="wrap_content"
             android:textSize="14sp" />
     </LinearLayout>
+
 </LinearLayout>

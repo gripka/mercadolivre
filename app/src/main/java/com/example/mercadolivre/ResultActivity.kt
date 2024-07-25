@@ -8,10 +8,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.mercadolivre.databinding.ActivityResultBinding
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import org.json.JSONArray
 import org.json.JSONObject
 import java.io.IOException
-import org.json.JSONArray
-import org.json.JSONException
 
 class ResultActivity : AppCompatActivity() {
     private lateinit var binding: ActivityResultBinding
@@ -75,23 +74,15 @@ class ResultActivity : AppCompatActivity() {
                         Log.d("APIResponse", responseData)
                         try {
                             val json = JSONObject(responseData)
-                            val results = json.optJSONArray("results")
-                                ?: JSONArray()  // Use optJSONArray para evitar exceções
+                            val results = json.optJSONArray("results") ?: org.json.JSONArray()
 
                             val products = mutableListOf<Product>()
                             for (i in 0 until results.length()) {
                                 val product = results.getJSONObject(i)
                                 val title = product.optString("title", "No title")
                                 val price = product.optString("price", "No price")
-                                val imageUrl = product.optJSONArray("pictures")
-                                    ?.optJSONObject(0)
-                                    ?.optString("url", "No image")
-                                    ?: "No image"
-                                val productUrl = product.optString(
-                                    "permalink",
-                                    "No URL"
-                                )  // Obtenha o URL do produto
-
+                                val imageUrl = product.optString("thumbnail", "")
+                                val productUrl = product.optString("permalink", "")
                                 val productItem = Product(title, price, imageUrl, productUrl)
                                 products.add(productItem)
                             }
@@ -105,7 +96,7 @@ class ResultActivity : AppCompatActivity() {
                                 }
                                 isLoading = false
                             }
-                        } catch (e: JSONException) {
+                        } catch (e: Exception) {
                             runOnUiThread {
                                 Log.e("ParsingError", "Error parsing JSON", e)
                                 isLoading = false
