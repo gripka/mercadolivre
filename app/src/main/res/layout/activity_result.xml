@@ -5,11 +5,8 @@
     android:orientation="vertical"
     android:padding="16dp">
 
-    <TextView
-        android:id="@+id/resultTextView"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Resultados"
-        android:textSize="20sp"
-        android:padding="16dp" />
+        android:layout_height="match_parent" />
 </LinearLayout>
