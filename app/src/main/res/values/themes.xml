@@ -1,9 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+    <!-- Base application theme -->
     <style name="Base.Theme.Mercadolivre" parent="Theme.Material3.Light.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <!-- Customize your light theme here -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryContainer">@color/colorPrimaryContainer</item>
+        <item name="colorOnPrimary">@color/colorOnPrimary</item>
+        <item name="colorSecondary">@color/colorSecondary</item>
+        <item name="colorSecondaryContainer">@color/colorSecondaryContainer</item>
+        <item name="colorOnSecondary">@color/colorOnSecondary</item>
+        <item name="colorBackground">@color/colorBackground</item>
+        <item name="colorOnBackground">@color/colorOnBackground</item>
+        <item name="colorSurface">@color/colorSurface</item>
+        <item name="colorOnSurface">@color/colorOnSurface</item>
+        <!-- Customize Toolbar and PopupMenu -->
+        <item name="toolbarStyle">@style/MyToolbar</item>
+        <item name="popupMenuStyle">@style/PopupMenuStyle</item>
     </style>
 
     <style name="Theme.Mercadolivre" parent="Base.Theme.Mercadolivre" />
+
+    <!-- Estilo da Toolbar -->
+    <style name="MyToolbar" parent="Widget.Material3.Toolbar">
+        <item name="android:background">@color/toolbarBackgroundColor</item>
+    </style>
+
+    <!-- Estilo do menu popup -->
+    <style name="PopupMenuStyle" parent="Widget.Material3.PopupMenu">
+        <item name="android:popupBackground">@color/menuBackgroundColor</item>
+    </style>
 </resources>

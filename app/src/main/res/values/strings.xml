@@ -2,4 +2,6 @@
     <string name="app_name">mercadolivre</string>
     <string name="todo">TODO</string>
     <string name="todos">TODO</string>
+    <string name="filter">Filter</string>
+
 </resources>

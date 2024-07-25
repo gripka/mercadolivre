@@ -16,19 +16,19 @@
     <ImageView
         android:id="@+id/imageView4"
         android:layout_width="350dp"
-        android:layout_gravity="center"
         android:layout_height="163dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="50dp"
         android:scaleType="fitCenter"
-        app:srcCompat="@drawable/ml_logo"
-        tools:srcCompat="@drawable/ml_logo"
-        android:layout_marginTop="50dp" />
+        app:srcCompat="@drawable/icone_peixe_transparente"
+        tools:srcCompat="@drawable/icone_peixe_transparente" />
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="match_parent"
-        android:layout_height="158dp"
+        android:layout_height="wrap_content"
         android:padding="20dp"
-        android:text="Afiliado Mercado Livre"
+        android:text="Peixando Preços"
         android:textAlignment="center"
         android:textSize="34sp"
         android:textStyle="bold" />
@@ -36,9 +36,9 @@
     <TextView
         android:id="@+id/textView2"
         android:layout_width="350dp"
-        android:layout_gravity="center"
         android:layout_height="108dp"
-        android:text="Encontre as melhores ofertas e produtos no Mercado Livre com nossa ferramenta de consulta!"
+        android:layout_gravity="center"
+        android:text="Porque economizar é como nadar com a correnteza!"
         android:textAlignment="center"
         android:textSize="22sp" />
 
@@ -58,7 +58,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:height="50dp"
-        android:text="Selecionar Frete Grátis"
+        android:text="Mercado Livre"
         android:textColorLink="#673AB7"
         android:textSize="16sp" />
 
@@ -66,10 +66,19 @@
         android:id="@+id/button4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:backgroundTint="#1B39DC"
-        android:text="Buscar"
         android:layout_gravity="center"
+        android:backgroundTint="#3F51B5"
         android:paddingLeft="30dp"
-        android:paddingRight="30dp" />
+        android:paddingRight="30dp"
+        android:text="Buscar" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="85dp"
+        android:layout_height="67dp"
+        android:layout_weight="1000"
+        android:visibility="visible"
+        tools:srcCompat="@tools:sample/backgrounds/scenic"
+        tools:visibility="gone" />
 
 </LinearLayout>

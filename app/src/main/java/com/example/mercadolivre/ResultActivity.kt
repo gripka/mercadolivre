@@ -1,7 +1,10 @@
 package com.example.mercadolivre
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -11,6 +14,7 @@ import okhttp3.Request
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.IOException
+import androidx.appcompat.widget.SearchView
 
 class ResultActivity : AppCompatActivity() {
     private lateinit var binding: ActivityResultBinding
@@ -18,11 +22,15 @@ class ResultActivity : AppCompatActivity() {
     private var currentPage = 1
     private var isLoading = false
     private var hasMoreItems = true
+    private var sortOrder = "asc"  // Default sorting order
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityResultBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // Setup Toolbar
+        setSupportActionBar(binding.toolbar)
 
         val query = intent.getStringExtra("query") ?: ""
         productAdapter = ProductAdapter(mutableListOf())
@@ -49,11 +57,66 @@ class ResultActivity : AppCompatActivity() {
         }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_main, menu)
+        val searchItem = menu?.findItem(R.id.action_filter)
+        val searchView = searchItem?.actionView as SearchView
+        searchView.queryHint = "Pesquisar..."
+
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                if (!query.isNullOrEmpty()) {
+                    // Atualize a lista com base na nova consulta
+                    val intent = Intent(this@ResultActivity, ResultActivity::class.java).apply {
+                        putExtra("query", query)
+                    }
+                    startActivity(intent)
+                }
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                // Atualize a lista conforme o texto da pesquisa muda (opcional)
+                return true
+            }
+        })
+
+        return true
+    }
+
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_filter -> true  // Handle filter menu item
+            R.id.filter_price_asc -> {
+                sortOrder = "asc"
+                reloadProducts()
+                true
+            }
+            R.id.filter_price_desc -> {
+                sortOrder = "desc"
+                reloadProducts()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun reloadProducts() {
+        // Reset pagination and data
+        currentPage = 1
+        productAdapter = ProductAdapter(mutableListOf())
+        binding.recyclerView.adapter = productAdapter
+        hasMoreItems = true
+        loadMoreData(intent.getStringExtra("query") ?: "")
+    }
+
     private fun loadMoreData(query: String) {
+        if (isLoading) return
         isLoading = true
         val client = OkHttpClient()
-        val url =
-            "https://api.mercadolibre.com/sites/MLB/search?q=$query&offset=${(currentPage - 1) * 10}&limit=10"
+        val sort = if (sortOrder == "asc") "price_asc" else "price_desc"
+        val url = "https://api.mercadolibre.com/sites/MLB/search?q=$query&offset=${(currentPage - 1) * 10}&limit=10&sort=$sort"
 
         val request = Request.Builder()
             .url(url)
@@ -74,7 +137,7 @@ class ResultActivity : AppCompatActivity() {
                         Log.d("APIResponse", responseData)
                         try {
                             val json = JSONObject(responseData)
-                            val results = json.optJSONArray("results") ?: org.json.JSONArray()
+                            val results = json.optJSONArray("results") ?: JSONArray()
 
                             val products = mutableListOf<Product>()
                             for (i in 0 until results.length()) {
