@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- PopupMenu style -->
-    <style name="CustomPopupMenu" parent="Widget.Material3.PopupMenu">
-        <item name="android:popupBackground">@color/menuBackgroundColor</item>
+    <!-- Estilo base do aplicativo -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Outros itens de estilo -->
+        <item name="android:dropDownListViewStyle">@style/CustomDropDownListView</item>
     </style>
-</resources>
 
+    <!-- Estilo personalizado para DropDownListView -->
+    <style name="CustomDropDownListView" parent="Widget.AppCompat.ListView.DropDown">
+        <item name="android:listSelector">@color/menuBackgroundColor</item>
+    </style>
+
+</resources>

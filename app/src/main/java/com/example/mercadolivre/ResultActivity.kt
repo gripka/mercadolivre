@@ -16,13 +16,16 @@ import org.json.JSONObject
 import java.io.IOException
 import androidx.appcompat.widget.SearchView
 
-class ResultActivity : AppCompatActivity() {
+class ResultActivity : AppCompatActivity(), PriceInputDialogFragment.PriceInputListener {
     private lateinit var binding: ActivityResultBinding
     private lateinit var productAdapter: ProductAdapter
     private var currentPage = 1
     private var isLoading = false
     private var hasMoreItems = true
     private var sortOrder = "asc"  // Default sorting order
+    private var minPrice: String? = null
+    private var maxPrice: String? = null
+    private var query: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,7 +35,9 @@ class ResultActivity : AppCompatActivity() {
         // Setup Toolbar
         setSupportActionBar(binding.toolbar)
 
-        val query = intent.getStringExtra("query") ?: ""
+        // Initialize variables
+        query = intent.getStringExtra("query") ?: ""
+
         productAdapter = ProductAdapter(mutableListOf())
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
         binding.recyclerView.adapter = productAdapter
@@ -47,13 +52,14 @@ class ResultActivity : AppCompatActivity() {
 
                 if (hasMoreItems && !isLoading && (visibleItemCount + firstVisibleItemPosition) >= totalItemCount) {
                     // Trigger the load more data
-                    loadMoreData(query)
+                    loadMoreData()
                 }
             }
         })
 
-        if (query.isNotEmpty()) {
-            loadMoreData(query)
+        // Load data if query is not empty
+        if (!query.isNullOrEmpty()) {
+            loadMoreData()
         }
     }
 
@@ -66,17 +72,13 @@ class ResultActivity : AppCompatActivity() {
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 if (!query.isNullOrEmpty()) {
-                    // Atualize a lista com base na nova consulta
-                    val intent = Intent(this@ResultActivity, ResultActivity::class.java).apply {
-                        putExtra("query", query)
-                    }
-                    startActivity(intent)
+                    this@ResultActivity.query = query
+                    reloadProducts()
                 }
                 return true
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                // Atualize a lista conforme o texto da pesquisa muda (opcional)
                 return true
             }
         })
@@ -84,10 +86,8 @@ class ResultActivity : AppCompatActivity() {
         return true
     }
 
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.action_filter -> true  // Handle filter menu item
             R.id.filter_price_asc -> {
                 sortOrder = "asc"
                 reloadProducts()
@@ -98,25 +98,43 @@ class ResultActivity : AppCompatActivity() {
                 reloadProducts()
                 true
             }
+            R.id.filter_price_range -> {
+                // Show dialog to enter price range
+                PriceInputDialogFragment.newInstance("Intervalo de Preço")
+                    .show(supportFragmentManager, "PriceInputDialogFragment")
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    override fun onPriceInputEntered(minPrice: String, maxPrice: String) {
+        // Update min and max price and reload products
+        this.minPrice = minPrice
+        this.maxPrice = maxPrice
+        reloadProducts()
     }
 
     private fun reloadProducts() {
         // Reset pagination and data
         currentPage = 1
-        productAdapter = ProductAdapter(mutableListOf())
-        binding.recyclerView.adapter = productAdapter
+        productAdapter.clearProducts()
         hasMoreItems = true
-        loadMoreData(intent.getStringExtra("query") ?: "")
+        loadMoreData()
     }
 
-    private fun loadMoreData(query: String) {
+    private fun loadMoreData() {
         if (isLoading) return
         isLoading = true
         val client = OkHttpClient()
         val sort = if (sortOrder == "asc") "price_asc" else "price_desc"
-        val url = "https://api.mercadolibre.com/sites/MLB/search?q=$query&offset=${(currentPage - 1) * 10}&limit=10&sort=$sort"
+        val url = buildString {
+            append("https://api.mercadolibre.com/sites/MLB/search?q=${query.orEmpty()}&offset=${(currentPage - 1) * 10}&limit=10&sort=$sort")
+            minPrice?.let { append("&price_from=$it") }
+            maxPrice?.let { append("&price_to=$it") }
+        }
+
+        Log.d("APIRequest", "Request URL: $url")  // Log the request URL
 
         val request = Request.Builder()
             .url(url)
@@ -134,7 +152,7 @@ class ResultActivity : AppCompatActivity() {
                 if (response.isSuccessful) {
                     response.body?.let {
                         val responseData = it.string()
-                        Log.d("APIResponse", responseData)
+                        Log.d("APIResponse", responseData)  // Log the API response
                         try {
                             val json = JSONObject(responseData)
                             val results = json.optJSONArray("results") ?: JSONArray()

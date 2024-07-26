@@ -2,18 +2,34 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Item de busca -->
     <item
         android:id="@+id/action_filter"
-        android:icon="@android:drawable/ic_menu_search"
+        android:icon="?android:attr/actionModeWebSearchDrawable"
         android:title="Buscar"
-        app:showAsAction="always|collapseActionView"
-        app:actionViewClass="androidx.appcompat.widget.SearchView">
+        app:actionViewClass="androidx.appcompat.widget.SearchView"
+        app:showAsAction="always|collapseActionView">
         <!-- No need to specify SearchView attributes here -->
     </item>
+
+    <!-- Item do submenu de preços -->
     <item
-        android:id="@+id/filter_price_asc"
-        android:title="Preço: Menor para Maior" />
-    <item
-        android:id="@+id/filter_price_desc"
-        android:title="Preço: Maior para Menor" />
+        android:id="@+id/action_price"
+        android:title="Ordenar por Preço"
+        app:showAsAction="never">
+        <!-- Definindo o submenu -->
+        <menu>
+            <item
+                android:id="@+id/filter_price_asc"
+                android:title="enor para Maior" />
+            <item
+                android:id="@+id/filter_price_desc"
+                android:title="Maior para Menor" />
+            <item
+                android:id="@+id/filter_price_range"
+                android:title="Intervalo de Preço" />
+        </menu>
+    </item>
+
 </menu>

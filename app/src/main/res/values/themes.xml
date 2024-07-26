@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme -->
     <style name="Base.Theme.Mercadolivre" parent="Theme.Material3.Light.NoActionBar">
@@ -27,6 +26,7 @@
 
     <!-- Estilo do menu popup -->
     <style name="PopupMenuStyle" parent="Widget.Material3.PopupMenu">
-        <item name="android:popupBackground">@color/menuBackgroundColor</item>
+        <item name="android:popupBackground">@drawable/popup_menu_background</item> <!-- Aplicando o drawable de fundo -->
+        <item name="android:textColor">@color/white</item> <!-- Opcional, se você quiser mudar a cor do texto -->
     </style>
 </resources>

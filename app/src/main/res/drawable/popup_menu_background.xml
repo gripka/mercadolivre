@@ -1,0 +1,5 @@
+<!-- res/drawable/popup_menu_background.xml -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="@color/menuBackgroundColor" /> <!-- Cor de fundo -->
+    <corners android:radius="30dp" /> <!-- Arredondamento dos cantos -->
+</shape>

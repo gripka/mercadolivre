@@ -1,16 +1,16 @@
 <resources>
     <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <color name="white">#FFFFFF</color>
     <color name="colorPrimary">#6200EE</color>
     <color name="colorPrimaryContainer">#3700B3</color>
     <color name="colorOnPrimary">#FFFFFF</color>
-    <color name="colorSecondary">#03DAC5</color>
+    <color name="colorSecondary">#03DAC6</color>
     <color name="colorSecondaryContainer">#018786</color>
     <color name="colorOnSecondary">#000000</color>
     <color name="colorBackground">#FFFFFF</color>
     <color name="colorOnBackground">#000000</color>
-    <color name="colorSurface">#FFFFFF</color>
+    <color name="colorSurface">#6200EE</color>
     <color name="colorOnSurface">#000000</color>
-    <color name="toolbarBackgroundColor">#FF5722</color>
-    <color name="menuBackgroundColor">#6200EE</color> <!-- Cor de fundo do menu de filtros -->
+    <color name="toolbarBackgroundColor">#6200EE</color>
+    <color name="menuBackgroundColor">#6200EE</color> <!-- Cor personalizada para o fundo do menu -->
 </resources>

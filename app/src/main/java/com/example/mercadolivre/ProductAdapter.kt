@@ -36,6 +36,12 @@ class ProductAdapter(private var products: MutableList<Product>) : RecyclerView.
         notifyItemRangeInserted(startPosition, newProducts.size)
     }
 
+    @SuppressLint("NotifyDataSetChanged")
+    fun clearProducts() {
+        products.clear()
+        notifyDataSetChanged()
+    }
+
     inner class ProductViewHolder(private val binding: ItemProductBinding) : RecyclerView.ViewHolder(binding.root) {
         @SuppressLint("SetTextI18n")
         fun bind(product: Product) {
@@ -44,37 +50,13 @@ class ProductAdapter(private var products: MutableList<Product>) : RecyclerView.
 
             val imageUrl = product.imageUrl
             if (!imageUrl.isNullOrEmpty()) {
-                Log.d("ProductAdapter", "Loading image URL: $imageUrl for product: ${product.title}")
                 Glide.with(binding.productImage.context)
                     .load(imageUrl)
                     .placeholder(R.drawable.placeholder)
                     .error(R.drawable.error)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .listener(object : RequestListener<Drawable> {
-                        override fun onLoadFailed(
-                            e: GlideException?,
-                            model: Any?,
-                            target: Target<Drawable>?,
-                            isFirstResource: Boolean
-                        ): Boolean {
-                            Log.e("Glide", "Error loading image: ${e?.message}")
-                            e?.logRootCauses("Glide")
-                            return false
-                        }
-
-                        override fun onResourceReady(
-                            resource: Drawable?,
-                            model: Any?,
-                            target: Target<Drawable>?,
-                            dataSource: com.bumptech.glide.load.DataSource?,
-                            isFirstResource: Boolean
-                        ): Boolean {
-                            return false
-                        }
-                    })
                     .into(binding.productImage)
             } else {
-                Log.d("ProductAdapter", "No image URL available for product: ${product.title}")
                 binding.productImage.setImageResource(R.drawable.placeholder)
             }
 
@@ -85,3 +67,4 @@ class ProductAdapter(private var products: MutableList<Product>) : RecyclerView.
         }
     }
 }
+
